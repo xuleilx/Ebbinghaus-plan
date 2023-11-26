@@ -55,6 +55,7 @@
         <tr><th>计划名</th><td><input id="plan"></td></tr>
         <tr><th>List 名</th><td><input id="book"></td></tr>
         <tr><th>开始日期</th><td><input id="startDate" type="date"></td></tr>
+		<tr><th>开始课程</th><td><input id="startLesson"></td></tr>
         <tr><th>每天List/Page</th><td><input id="listPerDay"></td></tr>
         <tr><th>List/Page总数</th><td><input id="totalList"><br></td></tr>
         <tr><th>是否逆序</th><td><input id="reverse" type="checkbox"></td></tr>
@@ -85,14 +86,16 @@
 <script>
     $("#plan").val(localStorage.getItem("plan")||"背单词计划表");
     $("#book").val(localStorage.getItem("book")||"L");
-    $("#listPerDay").val(localStorage.getItem("listPerDay")||"2");
-    $("#totalList").val(localStorage.getItem("totalList")||"42");
+	$("#startLesson").val(localStorage.getItem("startLesson")||"1");
+    $("#listPerDay").val(localStorage.getItem("listPerDay")||"1");
+    $("#totalList").val(localStorage.getItem("totalList")||"30");
     $("#reverse").prop("checked",JSON.parse(localStorage.getItem("reverse"))||false);
     $("#startDate").val(localStorage.getItem("startDate")||new Date().toJSON().slice(0,10));
 
     $("#generate").click(function() {
         var book=$("#book").val();
         var startDate=$("#startDate").val();
+		var startLesson=$("#startLesson").val()-1;
         var listPerDay=$("#listPerDay").val()-0;
         var totalList=$("#totalList").val()-0;
         var weekday=new Date(startDate).getDay();
@@ -108,7 +111,7 @@
         localStorage.setItem("reverse",reverse);
 
 
-        $("h1").text($("#plan").val())
+//        $("h1").text($("#plan").val())
         for (var i = 0,l=totalList/listPerDay+29+weekday; i<l; i++) {
             currentDay=new Date(firstLineSunday-0+i*86400000);
             calendar.append("<div>"+(currentDay.getMonth()-0+1)+"/"+currentDay.getDate()+"</div>")
@@ -127,6 +130,7 @@
             } else {
                 str=tmp.shift()+"~"+tmp.pop();
             }
+			str+=startLesson; // add by alex
             plan.push(str);
         };
         for (var i = 0,l=plan.length; i < l; i++) {
@@ -145,7 +149,7 @@
             } else {
                 str=tmp.shift()+"~"+tmp.pop();
             }
-
+            str+=startLesson; // add by alex
             plan.push(str);
 
         };
